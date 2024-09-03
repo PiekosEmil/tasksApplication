@@ -3,6 +3,7 @@ package com.emilpiekos.tasksapplication;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class Task {
@@ -51,11 +52,7 @@ public class Task {
     }
 
     public void setExpireDate(LocalDate expireDate) {
-        if (expireDate != null) {
-            this.expireDate = expireDate;
-        } else {
-            this.expireDate = LocalDate.parse("1999-01-01");
-        }
+        this.expireDate = Objects.requireNonNullElseGet(expireDate, () -> LocalDate.parse("1999-01-01"));
     }
 
     public boolean isCompleted() {

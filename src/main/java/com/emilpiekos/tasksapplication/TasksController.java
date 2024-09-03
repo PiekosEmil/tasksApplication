@@ -10,7 +10,7 @@ import java.util.Optional;
 @Controller
 public class TasksController {
 
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
 
     public TasksController(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
@@ -42,10 +42,14 @@ public class TasksController {
 
     @GetMapping("/edit")
     public String edit(@RequestParam Long id, Model model) {
-        Optional task = taskRepository.findById(id);
-        model.addAttribute("taskToEdit", task.get());
-        model.addAttribute("categories", Category.values());
-        return "edit";
+        Optional<Task> task = taskRepository.findById(id);
+        if (task.isPresent()) {
+            model.addAttribute("taskToEdit", task.get());
+            model.addAttribute("categories", Category.values());
+            return "edit";
+        } else {
+            return "redirect:/";
+        }
     }
 
     @PostMapping("/edit/task")
